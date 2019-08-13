@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/prakashpandey/go-github/conf"
 )
 
 // UserSearchResponse is used to map the response returned when a users are searched based on the filter query.
@@ -42,12 +44,12 @@ type UserFilter struct {
 
 // Users searches github users based on the filter criteria.
 func Users(filter *UserFilter) []UserSearch {
-	api := "/search/users?"
+	url := fmt.Sprintf("%s%s", conf.APIURL, "/search/users?")
 	addQualifier := func(qualifier string) {
-		if strings.HasSuffix(api, "?") {
-			api = fmt.Sprintf("%s%s", api, qualifier)
+		if strings.HasSuffix(url, "?") {
+			url = fmt.Sprintf("%s%s", url, qualifier)
 		} else {
-			api = fmt.Sprintf("%s+%s", api, qualifier)
+			url = fmt.Sprintf("%s+%s", url, qualifier)
 		}
 	}
 	if filter.Lang != "" {
@@ -65,7 +67,7 @@ func Users(filter *UserFilter) []UserSearch {
 		if page > 0 {
 			addQualifier(fmt.Sprintf("&page=%s", fmt.Sprintf("%d", filter.Page)))
 		}
-		return http.Get(api)
+		return http.Get(url)
 	}
 	// upperBound is used to run loop at least onces.
 	var upperBound int
