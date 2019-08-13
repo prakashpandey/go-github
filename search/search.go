@@ -67,6 +67,7 @@ func Users(filter *UserFilter) []UserSearch {
 		}
 		return http.Get(api)
 	}
+	// upperBound is used to run loop at least onces.
 	var upperBound int
 	if filter.Page < 1 {
 		upperBound = 1
