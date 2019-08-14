@@ -79,7 +79,7 @@ func Users(filter *UserFilter) []UserSearch {
 	getUsers := func(page int) ([]UserSearch, int) {
 		addParam(fmt.Sprintf("page=%s", fmt.Sprintf("%d", filter.Page)))
 		var users []UserSearch
-		fmt.Printf("url: %s\n", url)
+		// fmt.Printf("url: %s\n", url)
 		resp, err := http.Get(url)
 		if err != nil {
 			return users, 0

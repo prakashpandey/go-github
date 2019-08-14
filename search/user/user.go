@@ -29,9 +29,16 @@ type User struct {
 // GetUser returns user profile data.
 func GetUser(username string) *User {
 	url := fmt.Sprintf("%s%s%s", conf.APIURL, "/users", fmt.Sprintf("/%s", username))
-	fmt.Printf("user profile url: %s\n", url)
+	// fmt.Printf("user profile url: %s\n", url)
 	var user = &User{}
-	resp, err := http.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("Error building new request: %s", err)
+		return nil
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("token %s", conf.OAuth))
+	client := http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Printf("\nerror finding user: %s", err)
 		return nil
